@@ -3,6 +3,37 @@
 The first objective is to get PageSpeed score for the mobile and desktop versions
 to at least 90.
 
+Step 1: Profile
+
+Using ngrok, initial scores were 28/30 for mobile/desktop
+
+Should fixes:
+
+1. Optimize images
+2. Eliminate render-blocking JS and CSS in above-the-fold content
+
+Consider fixes:
+
+1. Leverage browser caching
+2. Enable compression
+3. Minify HTML
+
+Step 2: Optimize:
+
+1. Optimize images: Google's PageSpeed tool provided two optimized images:
+    * profilepic.jpg
+    * pizzeria.jpg.
+    * They were both sized and compressed. The original images file names are suffixed with "-lg".
+2. To eliminate render-blocking JS & CSS, I made these changes:
+    * used a media query on the print.css. Now, it will only request the CSS file if screen = print
+    * added async to the Google analytics script so it doesn't block rendering
+    * moved the Google Analytics script to the bottom of the body so it doesn't block rendering
+    * replaced the Google Font CSS file request to a JS script at the bottom of the body so getting the fonts doesn't block rendering
+
+Step 3: Measure: After above optimizations, PageSpeed improved to 95/96 mobile/desktop
+
+
+
 ## Website Performance Optimization portfolio project
 
 Your challenge, if you wish to accept it (and we sure hope you will), is to optimize this online portfolio for speed! In particular, optimize the critical rendering path and make this page render as quickly as possible by applying the techniques you've picked up in the [Critical Rendering Path course](https://www.udacity.com/course/ud884).
