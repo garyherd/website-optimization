@@ -49,7 +49,8 @@ stationary images, plus I think it triggers lots of rasterize paints
 so I just commented out everything but the data logging inside the function.
 
 ### Step 3: Measure:
-* Average scripting time to generate the last 10 frames: 0.013ms. That's a 1000x improvement
+* Average scripting time to generate the last 10 frames: 0.013ms. That's a 1000x improvement.
+sad;flkasjdlfkajsd;lf
 
 
 
