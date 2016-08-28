@@ -51,8 +51,7 @@ Also the function that calls updatePositions generates two hundred pizza images
 even though only a fraction of those are visible. So I cut it down to 40 pizzas.
 
 ### Step 3: Measure:
-* Average scripting time to generate the last 10 frames: 0.013ms. That's a 1000x improvement.
-sad;flkasjdlfkajsd;lf
+* Average scripting time to generate the last 10 frames: 0.7ms.
 
 
 
