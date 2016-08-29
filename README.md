@@ -53,6 +53,8 @@ even though only a fraction of those are visible. So I cut it down to 40 pizzas.
 ### Step 3: Measure:
 * Average scripting time to generate the last 10 frames: 0.7ms.
 
+Targeting 8/29 to finish this project.
+
 
 
 
