@@ -501,13 +501,17 @@ function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
+  // moved this sin calculation out of the loop. Only unique values are needed.
   var phases = [Math.sin(0), Math.sin(1), Math.sin(2), Math.sin(3), Math.sin(4)];
 
-  // var items = document.querySelectorAll('.mover');
+  // Replaced querySelectorAll with getElementsByClassName per the Project
+  // Webcast as it's supposed to be faster
   var items = document.getElementsByClassName("mover");
   for (var i = 0; i < items.length; i++) {
-    // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    // console.log(phase, document.body.scrollTop / 1250);
+    /* removed: var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+       because the sin function is calculating the same five number every time
+       through the loop. */
+
     items[i].style.left = items[i].basicLeft + 100 * phases[i % 5] + 'px';
   }
 
@@ -528,6 +532,9 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+
+  /* the original for loop went 200 times. Reduced to 40 and pizzas still fill
+  the frame */
   for (var i = 0; i < 40; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
