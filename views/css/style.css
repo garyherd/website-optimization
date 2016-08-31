@@ -33,7 +33,7 @@ form {
   position: fixed;
   width: 256px;
   z-index: -1;
-  backface-visibility: hidden;
+  /*backface-visibility: hidden;*/
 }
 
 .randomPizzaContainer {
@@ -51,7 +51,4 @@ form {
   background-color: rgba(240, 60, 60, 0.8);
 }
 
-/*#movingPizzas1 {
-  will-change: transform;
-}*/
 
