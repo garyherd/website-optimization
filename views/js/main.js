@@ -493,6 +493,8 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
+var items;
+
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
@@ -506,12 +508,13 @@ function updatePositions() {
 
   // Replaced querySelectorAll with getElementsByClassName per the Project
   // Webcast as it's supposed to be faster
-  var items = document.getElementsByClassName("mover");
+
+  /* moving this out of the function - only need this once!
+    var items = document.getElementsByClassName("mover"); */
   for (var i = 0; i < items.length; i++) {
     /* removed: var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
        because the sin function is calculating the same five number every time
        through the loop. */
-
     items[i].style.left = items[i].basicLeft + 100 * phases[i % 5] + 'px';
   }
 
@@ -526,12 +529,14 @@ function updatePositions() {
 }
 
 // runs updatePositions on scroll
-window.addEventListener('scroll', updatePositions);
+// window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  var movingPizzas = document.getElementById('movingPizzas1');
+  var phases = [Math.sin(0), Math.sin(1), Math.sin(2), Math.sin(3), Math.sin(4)];
 
   /* the original for loop went 200 times. Reduced to 40 and pizzas still fill
   the frame */
@@ -541,9 +546,14 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    elem.basicLeft = (i % cols) * s;
+    // elem.basicLeft = (i % cols) * s;
+    elem.style.left = ((i % cols) * s) + 100 * phases[i % 5] + 'px';
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(elem);
+    /* moved the line below out of the loop so it's just appending a child to the DOM,
+    and not querying */
+    // document.querySelector("#movingPizzas1").appendChild(elem);
+    movingPizzas.appendChild(elem)
   }
-  updatePositions();
+  items = document.getElementsByClassName("mover");
+  // updatePositions();
 });
