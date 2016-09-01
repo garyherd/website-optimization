@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
 * The scripting time is reduced from 60 ms to under 1 ms.
 * No jank present during scrolling, meaning frame rate is above 60fps
 
-![timeline](img/no-jank.jpg)
+![timeline](img/no-jank.JPG)
 
 
 ## Requirement 3: Computational efficiency
