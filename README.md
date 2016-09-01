@@ -188,4 +188,6 @@ See the comments in the code
 ### Step 3: Measure
 After the improvements, the time to resize is under 3ms.
 
+Also, it should be noted that the [Udacity forums](https://discussions.udacity.com/c/nd001-website-optimization/website-optimization-project) we very helpful when I got stuck
+
 
