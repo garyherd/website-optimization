@@ -485,6 +485,8 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
   console.log("Average scripting time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
+/* My non-moving pizzas
+
 var items;
 
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
@@ -503,10 +505,76 @@ function updatePositions() {
 
   /* moving this out of the function - only need this once!
     var items = document.getElementsByClassName("mover"); */
+//   for (var i = 0; i < items.length; i++) {
+//     /* removed: var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+//        because the sin function is calculating the same five number every time
+//        through the loop. */
+//     items[i].style.left = items[i].basicLeft + 100 * phases[i % 5] + 'px';
+//   }
+
+//   // User Timing API to the rescue again. Seriously, it's worth learning.
+//   // Super easy to create custom metrics.
+//   window.performance.mark("mark_end_frame");
+//   window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+//   if (frame % 10 === 0) {
+//     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+//     logAverageFrame(timesToUpdatePosition);
+//   }
+// }
+
+// // runs updatePositions on scroll
+// // window.addEventListener('scroll', updatePositions);
+
+// // Generates the sliding pizzas when the page loads.
+// document.addEventListener('DOMContentLoaded', function() {
+//   var cols = 8;
+//   var s = 256;
+
+//   /* pulled this out of the for loop and replaced querySelector with
+//     getElementById */
+//   var movingPizzas = document.getElementById('movingPizzas1');
+
+//   var phases = [Math.sin(0), Math.sin(1), Math.sin(2), Math.sin(3), Math.sin(4)];
+
+//   /* the original for loop went 200 times. Reduced to 40 and pizzas still fill
+//   the frame */
+//   for (var i = 0; i < 40; i++) {
+//     var elem = document.createElement('img');
+//     elem.className = 'mover';
+//     elem.src = "images/pizza.png";
+//     elem.style.height = "100px";
+//     elem.style.width = "73.333px";
+//     // elem.basicLeft = (i % cols) * s;
+
+//     // replicating static pizza placement from updatePositions function above
+//     elem.style.left = ((i % cols) * s) + 100 * phases[i % 5] + 'px';
+
+//     elem.style.top = (Math.floor(i / cols) * s) + 'px';
+
+//     /* moved the selector out of the loop */
+//     movingPizzas.appendChild(elem)
+//   }
+//   items = document.getElementsByClassName("mover");
+//   // updatePositions();
+// });
+
+// Moves the sliding background pizzas based on scroll position
+
+var items;
+
+function updatePositions() {
+  frame++;
+  window.performance.mark("mark_start_frame");
+  var topPosition = document.body.scrollTop / 1250;
+  var phases = [];
+  for (var i = 0; i < 5; i++) {
+    phases.push(Math.sin(topPosition + (i % 5)));
+  }
+  // console.log(phases[0], phases[1], phases[2]);
+
+  // items = document.getElementsByClassName('mover');
   for (var i = 0; i < items.length; i++) {
-    /* removed: var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-       because the sin function is calculating the same five number every time
-       through the loop. */
+    // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
     items[i].style.left = items[i].basicLeft + 100 * phases[i % 5] + 'px';
   }
 
@@ -521,37 +589,24 @@ function updatePositions() {
 }
 
 // runs updatePositions on scroll
-// window.addEventListener('scroll', updatePositions);
+window.addEventListener('scroll', updatePositions);
 
 // Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-
-  /* pulled this out of the for loop and replaced querySelector with
-    getElementById */
   var movingPizzas = document.getElementById('movingPizzas1');
 
-  var phases = [Math.sin(0), Math.sin(1), Math.sin(2), Math.sin(3), Math.sin(4)];
-
-  /* the original for loop went 200 times. Reduced to 40 and pizzas still fill
-  the frame */
-  for (var i = 0; i < 40; i++) {
+  for (var i = 0; i < 35; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    // elem.basicLeft = (i % cols) * s;
-
-    // replicating static pizza placement from updatePositions function above
-    elem.style.left = ((i % cols) * s) + 100 * phases[i % 5] + 'px';
-
+    elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-
-    /* moved the selector out of the loop */
-    movingPizzas.appendChild(elem)
+    movingPizzas.appendChild(elem);
   }
-  items = document.getElementsByClassName("mover");
-  // updatePositions();
+  items = document.getElementsByClassName('mover');
+  updatePositions();
 });
