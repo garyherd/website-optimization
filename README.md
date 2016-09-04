@@ -95,47 +95,64 @@ the screen shot:
 ![jank](img/jank.JPG)
 
 ### Step 2: Optimize:
-In the original code, the updatePositions function got called for every scroll event,
-so the static pizzas would get placed for every scroll event. This leads to scripting taking more
-time than needed. So I moved the placement of all pizzas into the page load event handler,
-which gets executed once. After removing the placement commands, the updatePositions function
-served no purpose, so I disabled calls.
-
-I also refactored the page load event handler so it generates fewer static pizzas. Fewer
-elements to render means fewer elements to lay and paint. See the comments inside
-the below code snippet.
+See the comments below for the details. In summary, I took a few calculations
+out of the loops they were in, and put them in top of the function so they only
+get assigned once. I also reduced the number of pizzas from
 
 ```
+function updatePositions() {
+  frame++;
+  window.performance.mark("mark_start_frame");
+  var topPosition = document.body.scrollTop / 1250;
+  var phases = [];
+  for (var i = 0; i < 5; i++) {
+    phases.push(Math.sin(topPosition + i));
+  }
+
+  // items = document.getElementsByClassName('mover');
+  for (var i = 0; i < items.length; i++) {
+    // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    /* moved the Math.sin calc above out of the loop so it just gets called
+     * once, when the function is called */
+    items[i].style.left = items[i].basicLeft + 100 * phases[i % 5] + 'px';
+  }
+
+  // User Timing API to the rescue again. Seriously, it's worth learning.
+  // Super easy to create custom metrics.
+  window.performance.mark("mark_end_frame");
+  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+  if (frame % 10 === 0) {
+    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+    logAverageFrame(timesToUpdatePosition);
+  }
+}
+
+// runs updatePositions on scroll
+window.addEventListener('scroll', updatePositions);
+
+// Generates the sliding pizzas when the page loads.
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
-
-  /* pulled this out of the for loop and replaced querySelector with
-    getElementById */
   var movingPizzas = document.getElementById('movingPizzas1');
+  /* moved the reference above out of the loop below so it only needs to getAdj
+   * initialized once - at page load. Also replace query selector with
+   * getElementById, which is supposed to be faster. */
 
-  var phases = [Math.sin(0), Math.sin(1), Math.sin(2), Math.sin(3), Math.sin(4)];
-
-  /* the original for loop went 200 times. Reduced to 40 and pizzas still fill
-  the frame */
-  for (var i = 0; i < 40; i++) {
+  for (var i = 0; i < 35; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
     elem.style.height = "100px";
     elem.style.width = "73.333px";
-    // elem.basicLeft = (i % cols) * s;
-
-    // replicating static pizza placement from updatePositions function above
-    elem.style.left = ((i % cols) * s) + 100 * phases[i % 5] + 'px';
-
+    elem.basicLeft = (i % cols) * s;
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
-
-    /* moved the selector out of the loop */
-    movingPizzas.appendChild(elem)
+    movingPizzas.appendChild(elem);
   }
-  items = document.getElementsByClassName("mover");
-  // updatePositions();
+  /* move the items variable out of the loop above. It's initialized in the
+   * global scope, and then assigned a value once, on page load. */
+  items = document.getElementsByClassName('mover');
+  updatePositions();
 });
 ```
 

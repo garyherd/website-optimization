@@ -568,13 +568,14 @@ function updatePositions() {
   var topPosition = document.body.scrollTop / 1250;
   var phases = [];
   for (var i = 0; i < 5; i++) {
-    phases.push(Math.sin(topPosition + (i % 5)));
+    phases.push(Math.sin(topPosition + i));
   }
-  // console.log(phases[0], phases[1], phases[2]);
 
   // items = document.getElementsByClassName('mover');
   for (var i = 0; i < items.length; i++) {
     // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
+    /* moved the Math.sin calc above out of the loop so it just gets called
+     * once, when the function is called */
     items[i].style.left = items[i].basicLeft + 100 * phases[i % 5] + 'px';
   }
 
@@ -595,9 +596,14 @@ window.addEventListener('scroll', updatePositions);
 document.addEventListener('DOMContentLoaded', function() {
   var cols = 8;
   var s = 256;
+  var pizzasToDisplay = Math.ceil(screen.height / s) * 8
+  console.log(pizzasToDisplay);
   var movingPizzas = document.getElementById('movingPizzas1');
+  /* moved the reference above out of the loop below so it only needs to getAdj
+   * initialized once - at page load. Also replace query selector with
+   * getElementById, which is supposed to be faster. */
 
-  for (var i = 0; i < 35; i++) {
+  for (var i = 0; i < pizzasToDisplay; i++) {
     var elem = document.createElement('img');
     elem.className = 'mover';
     elem.src = "images/pizza.png";
@@ -607,6 +613,8 @@ document.addEventListener('DOMContentLoaded', function() {
     elem.style.top = (Math.floor(i / cols) * s) + 'px';
     movingPizzas.appendChild(elem);
   }
+  /* move the items variable out of the loop above. It's initialized in the
+   * global scope, and then assigned a value once, on page load. */
   items = document.getElementsByClassName('mover');
   updatePositions();
 });
