@@ -97,7 +97,8 @@ the screen shot:
 ### Step 2: Optimize:
 See the comments below for the details. In summary, I took a few calculations
 out of the loops they were in, and put them in top of the function so they only
-get assigned once. I also reduced the number of pizzas from
+get assigned once. I also reduced the number of pizzas from 200 to around 48.
+The number is now dynamic, based on screen height
 
 ```
 function updatePositions() {
